@@ -20,7 +20,9 @@ export const crawlUrl = async (url: string) => {
     const forms: Array<string> = $("form").get().reduce((prev,current) => 
         current.attribs.id ? [...prev, current.attribs.id] : current, [])
 
-    return {imageUrls,linkUrl,forms}
+    const uniqueLinks = [...new Set(linkUrl)]
+    
+    return {imageUrls,uniqueLinks,forms}
 }
 
 export const validateUrl = async (url: string) : Promise<boolean> => {

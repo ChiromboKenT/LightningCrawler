@@ -6,7 +6,7 @@ import { crawlUrl } from "./worker-process";
 
 interface crawlResponse{
     imageUrls: string[];
-    linkUrl: string[];
+    uniqueLinks: string[];
     forms: string[];
 }
 
@@ -40,7 +40,8 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     });
     crawlWorker.on('completed',async (job: Job, returnvalue:crawlResponse ) => {
         // Add Links to queue
-        await addUrl("Response", returnvalue.linkUrl,urlResponseQueue)
+        await addUrl("Response", returnvalue.uniqueLinks,urlResponseQueue)
+        
        
     });
 
