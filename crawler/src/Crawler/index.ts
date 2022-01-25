@@ -3,7 +3,7 @@ import { Queue, Worker, Job } from 'bullmq'
 import { addUrl } from "./jobs";
 import { exitCode } from "process";
 import { crawlUrl } from "./worker-process";
-import { isValidUrl } from "../Helper/validateUrl";
+import { isValidUrl,containsProtocol } from "../Helper/validateUrl";
 import crawledSet from "../Helper/UrlSet";
 
 interface crawlResponse{
@@ -34,8 +34,6 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     const crawlWorker = new Worker("URL Frontier", async (job: Job) => {
         try{
             //Fetch & Crawl Site
-
-           
             const result = await crawlUrl(job.data)
             // Do something with job
             return result;
@@ -53,21 +51,22 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
 
         //Temporary right crawled to memory TODO -> Replace with cahe and database
         hasBeenCrawled.addToCrawledUrlSet(job.data)
-        
+        //console.log(`crawled: ${job.data}`)
 
     });
 
     const responseWorker = new Worker("URL Response", async (job: Job) => {
         try{
             //Validate url
-            let data
-            if(isValidUrl(job.data, host)){
+            let rawJobData = containsProtocol(job.data, host)
+            let data = ""
+            if(isValidUrl(rawJobData, host)){
                 //Check if crawled TODO :access cache and Database can use a Bloom filter with Redis & mongo 
                 
-                !hasBeenCrawled.contains(job.data) && await addUrl("Crawl",[job.data],urlFrontier)
+                data = !hasBeenCrawled.contains(rawJobData) ? rawJobData : "";
                 
             }
-            return `Response Job Done`
+            return data
         }catch(err){
             console.log(err)
             throw new Error("Error with crawl worker")
@@ -78,8 +77,8 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     responseWorker.on('completed',async (job: Job, returnvalue:any) => {
         // Add Links to queue
         //Add to Url Frontier
+        returnvalue.length > 0 && await addUrl("URL Frontier",[returnvalue],urlFrontier)
         
-        //console.log(`Completed Link: ${returnvalue}`)
     
     });
 
@@ -90,6 +89,10 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
         console.log(failedReason)
     })
 
+    crawlWorker.once("closing", (msg:string) => {
+        console.log("Close")
+    })
+
 
 }
-initiateCrawl("https://www.notion.so/lightningsocialventures/Jobs-at-Lightning-Social-Ventures-816b177773594e3684ee83889f8e8f08")
+initiateCrawl("https://chateaugateaux.co.za/")

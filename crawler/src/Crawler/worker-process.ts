@@ -7,7 +7,10 @@ interface asset {
     value : string;
 }
 export const crawlUrl = async (url: string) => {
-    const {body} = await needle('get',url) 
+    const {body} = await needle('get',url,{
+        open_timeout: 3000,
+        response_timeout : 5000
+    }) 
  
     const $ = cheerio.load(body)
 
@@ -21,7 +24,7 @@ export const crawlUrl = async (url: string) => {
         current.attribs.id ? [...prev, current.attribs.id] : current, [])
 
     const uniqueLinks = [...new Set(linkUrl)]
-    console.log(`crawled: ${url}`)
+   
     return {imageUrls,uniqueLinks,forms}
     
 
