@@ -1,0 +1,29 @@
+.status{
+    &-container{
+        flex: 0 0 30%;
+        width: 100%;
+        margin: 0 auto;
+        
+        padding-right: 1rem ;
+        padding-top: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-window{
+        width: 80%;
+        height: 100%;
+        background-color: white;
+        margin: 0 auto;
+    }
+    &-header{
+        width: 100%;
+        background-color: $color-dark;
+        color: white;
+        font-size: 1.2rem;
+        text-align: center;
+        border-bottom:  1px solid $color-border;
+        padding: .8rem 0;
+        font-weight: 700;
+    }
+}

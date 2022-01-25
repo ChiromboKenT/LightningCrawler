@@ -2,8 +2,13 @@
 
 .scroll{
     &-container{
-        width: 50%;
+        width: 80%;
         margin: 0 auto;
+        overflow-y: hidden; /* Hide vertical scrollbar */
+        &  div::-webkit-scrollbar {
+            display: none; /* for Chrome, Safari, and Opera */
+          }
+          
     }
     &-post{
         background-color: $color-scrollBackground;
@@ -16,6 +21,7 @@
     }
     &-button{
 
+        text-align: center;
         margin-top: .5rem;
         border-radius: 3px;
         border: 1px solid rgba($color-secondary, .4);

@@ -1,9 +1,9 @@
 import React from 'react';
-import InfiniteScroll from './InfiniteScroll';
+import InfiniteScrollList from './InfiniteScroll';
 
 const AssetPage = () => {
   return <div className='asset-container'>
-      <InfiniteScroll/>
+      <InfiniteScrollList/>
   </div>;
 };
 
