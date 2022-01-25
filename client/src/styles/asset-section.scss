@@ -1,0 +1,8 @@
+.asset{
+    &-section{
+        padding: 4rem;
+        display: grid;
+        grid-template-columns: minmax(100px, max-content)
+        repeat(auto-fill, 200px) 20%;;
+    }
+}

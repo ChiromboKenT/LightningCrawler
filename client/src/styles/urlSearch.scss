@@ -1,0 +1,52 @@
+.url{
+    &-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &-form{
+        margin: 0 auto;
+        width: 50%;
+        display: flex;
+        padding: 3rem 0;
+    }
+    &-input{
+        flex:  1;
+        border-radius: 3px;
+        border: 1px solid rgba(0, 0, 0, 0.87);
+        font-size: 14px;
+        background-color: #282828;
+        padding: .8rem .3rem;
+        min-width: 10rem;
+        margin-right: 1rem;
+        color: white;
+        font-weight: 700;
+
+        &:focus{
+            outline-color: rgb(20, 102, 168);
+        }
+       
+    }
+    &-button{
+        
+        flex: 0 0 25%;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border-radius: 3px;
+        border: 1px solid rgba($color-secondary, .4);
+        padding: .5rem .8rem ;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+         rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+        &:hover{
+            cursor: pointer;
+            border: 1px solid $color-dark;
+            background-color: transparent;
+        }
+        &:active{
+            box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, 
+            rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+        }
+        
+    }
+
+}
