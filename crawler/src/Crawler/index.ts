@@ -1,14 +1,18 @@
-import {parseUrl} from "../Helper/Helpers"
+import {parseUrl} from "../Helper/ParseUrl"
 import { Queue, Worker, Job } from 'bullmq'
-import UrlSet from "../Helper/UrlSet";
 import { addUrl } from "./jobs";
 import { exitCode } from "process";
-import { fetchUrl } from "./process";
+import { crawlUrl } from "./worker-process";
 
-export const initiateCrawl =  async (url:string): Promise<void> => {
+interface crawlResponse{
+    imageUrls: string[];
+    linkUrl: string[];
+    forms: string[];
+}
+
+export const initiateCrawl =  async (url:string = "https://www.lightningreach.org/"): Promise<void> => {
     const parsedUrl = parseUrl(url)
-    const {hostname, origin} = parsedUrl
-    if(hostname.length <= 0){
+    if(parsedUrl.origin.length <= 0){
         throw Error("Invalid Source Url")
     }
     //Create URL Queue
@@ -17,36 +21,51 @@ export const initiateCrawl =  async (url:string): Promise<void> => {
     //Create Crawl Response Queue
     const urlResponseQueue = new Queue('URL Response')
     
-    //Create URLSet
-    const urlCategories = new UrlSet(url, true);
 
     //Add Job To Queue
-    await addUrl("Crawl",[url],urlFrontier)
+    await addUrl("Crawl",[parsedUrl.origin],urlFrontier)
 
     //TODO add multi threading for multiple workers
-    const worker = new Worker("URL Frontier", async (job: Job) => {
+    const crawlWorker = new Worker("URL Frontier", async (job: Job) => {
         try{
             //Fetch & Crawl Site
-            const result = await fetchUrl(url)
-         
-        
-            // Optionally sending an object as progress
-            job.updateProgress({foo: "34"});
-            
+            const result = await crawlUrl(job.data)
             // Do something with job
             return result;
         }catch(err){
             console.log(err)
-            throw exitCode
+            throw new Error("Error with crawl worker")
         }
-        
-      });
+    
+    });
+    crawlWorker.on('completed',async (job: Job, returnvalue:crawlResponse ) => {
+        // Add Links to queue
+        await addUrl("Response", returnvalue.linkUrl,urlResponseQueue)
+       
+    });
 
-    worker.on('completed', (job: Job, returnvalue: any) => {
-        // Do something with the return value.
-        console.log(returnvalue)
-      });
+    const responseWorker = new Worker("URL Response", async (job: Job) => {
+        try{
+            //Validate url
+            //Check if crawled
+            //Add priority
+            //Add to Url Frontier
+            
+            
+            return 'some value'
+        }catch(err){
+            console.log(err)
+            throw new Error("Error with crawl worker")
+        }
+    });
+
+    responseWorker.on('completed', (job: Job, returnvalue:any ) => {
+        // Add Links to queue
+        console.log(`Completed Link: ${job.data}`)
+        
+    
+    });
 
 
 }
-initiateCrawl("https://www.lightningreach.org/")
+initiateCrawl()

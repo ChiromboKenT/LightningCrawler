@@ -6,7 +6,7 @@ interface asset {
     type : string,
     value : string;
 }
-export const fetchUrl = async (url: string) => {
+export const crawlUrl = async (url: string) => {
     const {body} = await needle('get',url) 
  
     const $ = cheerio.load(body)
@@ -22,4 +22,9 @@ export const fetchUrl = async (url: string) => {
 
     return {imageUrls,linkUrl,forms}
 }
+
+export const validateUrl = async (url: string) : Promise<boolean> => {
+    return false
+}
+
 
