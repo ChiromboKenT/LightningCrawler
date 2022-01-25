@@ -23,8 +23,10 @@
       "mongoose": "^6.1.7",
       "needle": "^3.0.0",
       "node-fecth": "^0.0.1-security",
+      "parse-domain": "^7.0.0",
       "reflect-metadata": "^0.1.10",
-      "typeorm": "0.2.41"
+      "typeorm": "0.2.41",
+      "uuid": "^8.3.2"
    },
    "devDependencies": {
       "@types/cors": "^2.8.12",
@@ -32,6 +34,7 @@
       "@types/mongoose": "^5.11.97",
       "@types/node": "^8.0.29",
       "@types/url-parse": "^1.4.7",
+      "@types/uuid": "^8.3.4",
       "nodemon": "^2.0.15",
       "ts-node": "^10.4.0",
       "typescript": "3.3.3333"

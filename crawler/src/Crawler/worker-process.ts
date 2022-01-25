@@ -21,12 +21,11 @@ export const crawlUrl = async (url: string) => {
         current.attribs.id ? [...prev, current.attribs.id] : current, [])
 
     const uniqueLinks = [...new Set(linkUrl)]
-    
+    console.log(`crawled: ${url}`)
     return {imageUrls,uniqueLinks,forms}
+    
+
 }
 
-export const validateUrl = async (url: string) : Promise<boolean> => {
-    return false
-}
 
 
