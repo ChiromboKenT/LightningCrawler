@@ -42,6 +42,7 @@ const ApiContextProvider = (props) => {
     useEffect(() => {
         const socket = io(ENDPOINT,{transports: ['websocket']});
         socket.on("Crawled", data => {
+            console.log(data)
           dispatch({
               type: "FETCH",
               payload : data

@@ -2,12 +2,12 @@ import {parseUrl} from "../Helper/ParseUrl"
 import { Queue, Worker, Job } from 'bullmq'
 import { addUrl } from "./jobs";
 import { exitCode } from "process";
-import { crawlUrl , emitData } from "./worker-process";
+import { crawlUrl , emitData,emitDone } from "./worker-process";
 import { isValidUrl,containsProtocol } from "../Helper/validateUrl";
 import crawledSet from "../Helper/UrlSet";
 
 
-interface crawlResponse{
+export interface crawlResponse{
     imageUrls: string[];
     uniqueLinks: string[];
     forms: string[];
@@ -22,11 +22,14 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     let host = parsedUrl.origin
     //Create URL Queue
     const urlFrontier = new Queue('URL Frontier');
+    await urlFrontier.obliterate({ force: true })
     
     //Create Crawl Response Queue
     const urlResponseQueue = new Queue('URL Response')
-    
+    await urlResponseQueue.obliterate({ force: true })
+
     const hasBeenCrawled = new crawledSet
+
 
     //Add Job To Queue
     await addUrl("Crawl",[parsedUrl.origin],urlFrontier)
@@ -55,6 +58,7 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
         //console.log(`crawled: ${job.data}`)
 
         //Emit Events To client
+        emitData(job.data, returnvalue)
         
     });
 
@@ -66,7 +70,7 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
             if(isValidUrl(rawJobData, host)){
                 //Check if crawled TODO :access cache and Database can use a Bloom filter with Redis & mongo 
                 
-                data = !hasBeenCrawled.contains(rawJobData) ? rawJobData : "";
+                data = hasBeenCrawled.contains(rawJobData) ? "" : rawJobData;
                 
             }
             return data
@@ -80,10 +84,13 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     responseWorker.on('completed',async (job: Job, returnvalue:any) => {
         // Add Links to queue
         //Add to Url Frontier
-        returnvalue.length > 0 && await addUrl("URL Frontier",[returnvalue],urlFrontier)
+        returnvalue.length > 1 && await addUrl("URL Frontier",[returnvalue],urlFrontier)
         
     
     });
+    crawlWorker.on("drained", () => {
+        emitDone()
+    })
 
     responseWorker.on("error", (failedReason: Error) => {
         console.log(failedReason)
@@ -97,4 +104,7 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     })
 
 
+
+
 }
+
