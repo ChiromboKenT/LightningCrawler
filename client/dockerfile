@@ -1,18 +1,9 @@
 FROM node:16-alpine3.14
 
-# update packages
-RUN apk update
-# create root application folder
 WORKDIR /app
 
 # copy configs to /app folder
 COPY package*.json ./
-COPY tsconfig.json ./
-# copy source code to /app/src folder
-COPY src /app/src
-
-# check files list
-RUN ls -a
 
 ARG NODE_ENV
 RUN if [ "${NODE_ENV}" = "development" ]; \
@@ -20,9 +11,14 @@ RUN if [ "${NODE_ENV}" = "development" ]; \
         else npm install --only=production; \
         fi
 
-COPY . . 
+# copy source code to /app/src folder
+COPY . .
+
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+
 RUN npm run build
 
 EXPOSE 7777
 
-CMD [ "node", "./dist/index.js" ]
+CMD [ "npm", "run", "dev" ]

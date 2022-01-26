@@ -1,0 +1,19 @@
+version: '3'
+services:
+  crawl-api: 
+    build:
+      args:
+        NODE_ENV: "development"
+    command: npm run crawl
+    volumes:
+      -./:/app
+  client:
+    volumes:
+      -./:/app
+  mongodb:
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./.database.env
+    
+

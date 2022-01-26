@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:5.0.2
+    container_name: "typeorm-mongodb"
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+  crawl-api:
+    depends_on:
+      - mongodb
+    build :
+      context: ./crawler
+    restart : unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+        - /app/node_modules
+  client :
+    stdin_open: true
+    depends_on:
+      - crawl-api
+    build: 
+      context: ./client
+      args:
+         - REACT_APP_API_BASE_URL=http://127.0.0.1:8081
+    ports:
+      - 3000:3000
+    volumes:
+      - /app/node_modules
+    env_file:
+      - ./.env
+        
+  redis:
+    image: redis:latest
+    deploy:
+      replicas: 1
+  nginx :
+    depends_on:
+      - crawl-api
+      - client
+    restart : always
+    build : 
+      context : ./nginx
+    ports:
+      - "3050:80"
+  
+volumes:
+  db:

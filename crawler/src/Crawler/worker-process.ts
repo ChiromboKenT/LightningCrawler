@@ -2,6 +2,7 @@ import needle from "needle"
 import cheerio from "cheerio"
 
 
+
 interface asset {
     type : string,
     value : string;
@@ -27,6 +28,10 @@ export const crawlUrl = async (url: string) => {
    
     return {imageUrls,uniqueLinks,forms}
     
+
+}
+
+export const emitData = (url:string) => {
 
 }
 

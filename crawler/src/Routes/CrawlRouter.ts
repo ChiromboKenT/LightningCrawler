@@ -3,4 +3,4 @@ import {initiateCrawl} from "../Crawler/index"
 
 export const router = Router()
 
-router.get("/crawl", initiateCrawl)
+router.get("/", initiateCrawl)

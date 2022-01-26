@@ -2,9 +2,10 @@ import {parseUrl} from "../Helper/ParseUrl"
 import { Queue, Worker, Job } from 'bullmq'
 import { addUrl } from "./jobs";
 import { exitCode } from "process";
-import { crawlUrl } from "./worker-process";
+import { crawlUrl , emitData } from "./worker-process";
 import { isValidUrl,containsProtocol } from "../Helper/validateUrl";
 import crawledSet from "../Helper/UrlSet";
+
 
 interface crawlResponse{
     imageUrls: string[];
@@ -53,6 +54,8 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
         hasBeenCrawled.addToCrawledUrlSet(job.data)
         //console.log(`crawled: ${job.data}`)
 
+        //Emit Events To client
+        
     });
 
     const responseWorker = new Worker("URL Response", async (job: Job) => {
@@ -95,4 +98,3 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
 
 
 }
-initiateCrawl("https://chateaugateaux.co.za/")

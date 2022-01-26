@@ -3,7 +3,7 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Assets} from "./Entity/Asssets";
 import { config } from "./Configs/config";
-import app from "./Server/server"
+import app from "./Server/App"
 
 createConnection().then(async connection => {
 
