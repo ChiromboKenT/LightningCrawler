@@ -35,7 +35,11 @@ export const crawlUrl = async (url: string) => {
 export const emitData = (url:string, data : crawlResponse) => {
     io.emit("Crawled", {
         url,
-        data
+        data : {
+            "Images" : data.imageUrls,
+            "Forms" : data.forms,
+            "Links" : data.uniqueLinks
+        }
     })
 }
 

@@ -1,43 +1,32 @@
-import React, { useState  } from 'react';
+import React, { useState } from 'react';
 import InfiniteScroll from "react-infinite-scroll-component";
-// styling post container
+import LinkCard from './LinkCard';
 
 
-// styling container wrapper
-
-
-const InfiniteScrollList = () => {
-    // initialize list of posts
-    const [postList, setPostList] = useState([...Array.from({ length: 5 })]);
-    const dataLength = postList.length 
+const InfiniteScrollList = ({data,displayAssets}) => {
     const fetchMoreData = () => {
        
-      }; 
-
-
+    };
+    
+    
     return (<div className="scroll-container">
-        <InfiniteScroll
-          dataLength={dataLength}
+        {data.length > 1 && <InfiniteScroll
+          dataLength={data.length}
           next={() => fetchMoreData()}
           hasMore={true}
           loader={<h4>Loading...</h4>}
           height={600}
         >
           {
-            postList.map((post, index) => {
-                return (<div key={index} 
-                            className="scroll-post" 
-                            >
-                    <h2> {post } </h2>
-                </div>)
-            })
-            }
-        </InfiniteScroll>
+            data.map((element) => element.id.length > 0 && <LinkCard key={element.id}
+             link={element.url} id={element.id} onHandleCardClick={displayAssets}/>)  
+          }
+        </InfiniteScroll>}
         <div className="post-list">
             
-            <div className="scroll-button">
+            {/* <div className="scroll-button">
                     <h2>Load More</h2>
-           </div>
+           </div> */}
         </div>
     </div>)
 }

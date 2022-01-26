@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
+import axios from 'axios';
+const ENDPOINT = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:3001";
 
 const UrlSearch = () => {
+  const [sendState,setSendState] = useState("")
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-  const onSubmit = data => console.log(data);
+  const onSubmit = async data => {
+    if(sendState !== data.url){
+      console.log(data.url)
+      await axios({
+        method: 'post',
+        url: `${ENDPOINT}/crawl`,
+        data : {
+          url : data.url
+        }
+      })
+    }
+    setSendState(data.url)
+  };
   let exp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
   const urlRegex = new RegExp(exp)
   return <form id="form1" className="url-form" onSubmit={handleSubmit(onSubmit)}>
