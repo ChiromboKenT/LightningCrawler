@@ -1,6 +1,6 @@
 import { Router } from "express";
-import {initiateCrawl} from "../Crawler/index"
+import { crawlController } from "../Controllers/crawl";
 
 export const router = Router()
 
-router.get("/", initiateCrawl)
+router.get("/", crawlController)

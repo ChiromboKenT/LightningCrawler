@@ -40,6 +40,7 @@ export const emitData = (url:string, data : crawlResponse) => {
 }
 
 export const emitDone = () => {
+    console.log("Done Believe it!")
     io.emit("Done")
 }
 

@@ -22,12 +22,10 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     let host = parsedUrl.origin
     //Create URL Queue
     const urlFrontier = new Queue('URL Frontier');
-    await urlFrontier.obliterate({ force: true })
-    
+    await clearQueues(urlFrontier)
     //Create Crawl Response Queue
     const urlResponseQueue = new Queue('URL Response')
-    await urlResponseQueue.obliterate({ force: true })
-
+    await clearQueues(urlResponseQueue)
     const hasBeenCrawled = new crawledSet
 
 
@@ -60,6 +58,8 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
         //Emit Events To client
         emitData(job.data, returnvalue)
         
+        console.log(`Crawled: ${job.data}`)
+        
     });
 
     const responseWorker = new Worker("URL Response", async (job: Job) => {
@@ -88,7 +88,12 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
         
     
     });
-    crawlWorker.on("drained", () => {
+    crawlWorker.on("drained", async () => {
+        
+        await clearQueues(urlFrontier)
+        await clearQueues(urlResponseQueue)
+        
+        
         emitDone()
     })
 
@@ -102,9 +107,14 @@ export const initiateCrawl =  async (url:string = "https://www.lightningreach.or
     crawlWorker.once("closing", (msg:string) => {
         console.log("Close")
     })
+   
 
 
 
 
 }
 
+export const clearQueues = async (queue: Queue , force:boolean = true): Promise<void> => {
+    await queue.obliterate({force})
+}
+ 
