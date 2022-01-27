@@ -1,0 +1,16 @@
+version: '3'
+services:
+  api: 
+    build:
+      args:
+        NODE_ENV: "production"
+    command: node /ap/dist/server/app.js
+  client:
+    build: 
+      dockerfile: dockerfile
+      context: ./client
+    volumes:
+      -./client:/app
+
+    
+

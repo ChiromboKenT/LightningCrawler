@@ -10,10 +10,10 @@ const UrlSearch = () => {
 
   const onSubmit = async data => {
     if(sendState !== data.url){
-      console.log(data.url)
+     
       await axios({
         method: 'post',
-        url: `${ENDPOINT}/crawl`,
+        url: "/api/crawl",
         data : {
           url : data.url
         }

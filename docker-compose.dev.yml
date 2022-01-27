@@ -1,19 +1,18 @@
 version: '3'
 services:
-  crawl-api: 
+  api: 
     build:
       args:
         NODE_ENV: "development"
-    command: npm run crawl
     volumes:
-      -./:/app
+      -./crawler:/app
+    command: npm run dev
   client:
+    build: 
+      dockerfile: dockerfile
+      context: ./client
     volumes:
-      -./:/app
-  mongodb:
-    ports:
-      - "27017:27017"
-    env_file:
-      - ./.database.env
+      -./client:/app
+
     
 

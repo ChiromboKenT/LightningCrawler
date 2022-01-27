@@ -6,19 +6,10 @@ WORKDIR /app
 COPY package*.json ./
 
 ARG NODE_ENV
-RUN if [ "${NODE_ENV}" = "development" ]; \
-        then npm install --also=dev; \
-        else npm install --only=production; \
-        fi
+RUN npm install --also=dev;
 
 # copy source code to /app/src folder
 COPY . .
 
-ARG REACT_APP_API_BASE_URL
-ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
-
-RUN npm run build
-
-EXPOSE 7777
-
-CMD [ "npm", "run", "dev" ]
+EXPOSE 3000
+CMD [ "npm", "start" ]
