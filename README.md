@@ -20,13 +20,13 @@
 
 For development, you will only need Node.js and a node global package, Yarn, installed in your environement.
 
-# Node
-- # Node installation on Windows
+### Node
+- #### Node installation on Windows
 
   Just go on [official Node.js website](https://nodejs.org/) and download the installer.
 Also, be sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
 
-- # Node installation on Ubuntu
+- #### Node installation on Ubuntu
 
   You can install nodejs and npm easily with apt install, just run the following commands.
 
@@ -42,7 +42,7 @@ If the installation was successful, you should be able to run the following comm
     6.1.0
 
 
-## Install
+### Install
 
 ```sh
  (cd crawler && npm install) & (cd client && npm install)
@@ -50,21 +50,21 @@ If the installation was successful, you should be able to run the following comm
 ```
 ## Usage Locally
 
-# Run Backend
+### Run Backend
   - Navigate to crawler folder 
 ```sh
   cd crawler && npm run dev
 ```
 
-# Run Client
+### Run Client
   - Navigate to client folder  *Make sure to be in Project root diretory LightningCrawler/
 ```sh
   cd client && npm start
 ```
-# Open Application
+### Open Application
   - Open application on <a href="http://127.0.0.1:3000/" target="_blank">http://localhost:3000/</a>
 
-# Run concurrently with 
+### Run concurrently with 
 ```sh
      (cd crawler npm run) & (cd client && npm start)
 ```
@@ -74,7 +74,7 @@ If the installation was successful, you should be able to run the following comm
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
-# Open Application
+### Open Application
   - Open application on <a href="http://127.0.0.1:80/" target="_blank">http://localhost:80/</a>
 
 ## Author
