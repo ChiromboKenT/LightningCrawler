@@ -10,7 +10,12 @@
   <a href="https://github.com/ChiromboKenT/LightningCrawler/blob/master/LICENSE" target="_blank">
     <img alt="License: ISC" src="https://img.shields.io/github/license/ChiromboKenT/Lightning Crawler" />
   </a>
+  <a href="https://github.com/ChiromboKenT/LightningCrawler/blob/master/LICENSE" target="_blank">
+    <img alt="Tech: typescript" src="https://img.shields.io/npm/types/typescript" />
+  </a>
+  
 </p>
+
 
 > Scalable Web Crawler for internal website, built for Lightning Internal assessment
 
