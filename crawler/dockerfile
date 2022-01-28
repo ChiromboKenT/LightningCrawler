@@ -13,14 +13,4 @@ COPY src /app/src
 
 # check files list
 RUN ls -a
-ARG NODE_ENV=production
-RUN if [ "${NODE_ENV}" = "development" ]; \
-        then npm install --also=dev; \
-        else npm install --only=production; \
-        fi
-
-COPY . . 
-
-RUN if [ "${NODE_ENV}" = "production" ]; \
-        then npm run build \
-        fi
+RUN npm install

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
+import config from '../config';
 const ENDPOINT = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:3001";
 
 const UrlSearch = () => {
@@ -13,7 +14,7 @@ const UrlSearch = () => {
      
       await axios({
         method: 'post',
-        url: "/api/crawl",
+        url: `${config.services.host}/crawl`,
         data : {
           url : data.url
         }

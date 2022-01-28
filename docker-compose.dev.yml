@@ -5,14 +5,14 @@ services:
       args:
         NODE_ENV: "development"
     volumes:
-      -./crawler:/app
+      - ./crawler:/app
     command: npm run dev
   client:
     build: 
       dockerfile: dockerfile
       context: ./client
     volumes:
-      -./client:/app
+      - ./client:/app
 
     
 

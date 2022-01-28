@@ -2,8 +2,7 @@ version: '3.8'
 
 services:   
   api:
-    depends_on:
-      - redis
+    image: nginx-api
     build :
       context: ./crawler
     restart : unless-stopped
@@ -11,33 +10,39 @@ services:
       - ./.env
     volumes:
         - /app/node_modules
-  client :
-    stdin_open: true
+    networks:
+      - backend
     depends_on:
-      - api
-    restart : unless-stopped
+      - redis-server
+    ports:
+      - "6001:6001"
+      - "5000:5000"
+  client :
+    image : nginx-frontend
     build: 
       context: ./client
       args:
-         - REACT_APP_SOCKET_URL=http://127.0.0.1:5000
+        - REACT_APP_SERVICES_HOST=/api/v1
     ports:
-      - 3000:3000
+      - "80:80"
+    depends_on:
+      - api
+    restart : unless-stopped
     volumes:
       - /app/node_modules
     env_file:
       - ./.env
-        
-  redis:
+    networks:
+      - frontend
+      - backend
+
+  redis-server:
+    container_name: redis
     image: redis:latest
-    deploy:
-      replicas: 1
-  nginx :
-    depends_on:
-      - api
-      - client
-    restart : always
-    build : 
-      context : ./nginx
-    ports:
-      - "3050 :80"
-  
+    command: ["redis-server", "--bind", "redis", "--port", "6300"]
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+    driver: bridge
