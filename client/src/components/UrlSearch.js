@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 import config from '../config';
-const ENDPOINT = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:3001";
 
 const UrlSearch = () => {
   const [sendState,setSendState] = useState("")
@@ -14,7 +13,7 @@ const UrlSearch = () => {
      
       await axios({
         method: 'post',
-        url: `${config.services.host}/crawl`,
+        url: `${config.services.host}/api/v1/crawl`,
         data : {
           url : data.url
         }
@@ -27,7 +26,7 @@ const UrlSearch = () => {
   return <form id="form1" className="url-form" onSubmit={handleSubmit(onSubmit)}>
           <div  className="url-form--container">
           <input className="url-input" type="text" 
-              defaultValue="https://google.com" {...register("url", {
+              defaultValue="https://www.lightningreach.org/" {...register("url", {
                 required:{
                   value: true,
                   message : "The url is a required field"
